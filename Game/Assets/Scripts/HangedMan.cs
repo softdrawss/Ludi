@@ -6,54 +6,48 @@ using UnityEngine;
 public class HangedMan : MonoBehaviour
 {
     // Text -> not sure which type should I use
-    Keyboard keys;
     string text;
-    public TextMeshProUGUI letter;
-
-    // Header
-    public string[] headers;
-    string title;
     public TextMeshProUGUI playerTitle;
 
-    // Sprites
-    //int i = 0;
-    //public Sprite[] spriteArray;
-    //public SpriteRenderer spriteRenderer;
+    // Titles
+    public string[] headers;
+    string title;
+    int numTitle = 0;
+
+    // Score
+    int scoreNum = 0;
+    public TextMeshProUGUI scoreText = null;
+
+    // Camera
+    public Camera cam;
 
     // Start is called before the first frame update
     void Start()
     {
-        //spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        startGame(0);
-        //StartCoroutine(NewHeading());
+        StartGame(numTitle);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void CheckLetter(string c)
     {
-        // error here, it does not detect the letters
-        text = letter.text;
-        if (isContained(text))
+        print("Checking: " + c);
+        if (title.Contains(c))
         {
             print("It is contained!");
-            addLetters(text);
+            AddLetters(c);
         }
         else
         {
             print("Nope!");
-            //i++;
-            //ChangeSprite(i);
         }
     }
 
     // Create misterious title
-    void startGame(int t)
+    void StartGame(int numTitle)
     {
         playerTitle.text = null;
-        title = headers[0];
+        title = headers[numTitle];
         foreach (char c in title)
         {
-            // White spaces must be ' ', if they are written like " " it detects it as a string
             if (!c.Equals(' '))
             {
                 playerTitle.text = playerTitle.text + "?";
@@ -63,50 +57,40 @@ public class HangedMan : MonoBehaviour
                 playerTitle.text = playerTitle.text + " ";
             }
         }
-
-    }
-
-    // Check if the letter is inside the title
-    bool isContained(string c)
-    {
-        print("Checking...");
-        if (title.Contains(c)) return true;
-        else return false;
     }
 
     // Add the letters that are correct
-    void addLetters(string c)
+    void AddLetters(string c)
     {
-        string t = "";
-        foreach (char i in title)
+        string t = playerTitle.text;
+        for (int i = 0; i < title.Length; i++)
         {
-            if (i.Equals(c))
+            if (title[i] == c[0] && t[i] == '?')
             {
-                print(c);
-                t = t + c;
-            }
-            else if (c.Equals('?'))
-            {
-                t = t + "?";
-            }
-            else if (c.Equals(' '))
-            {
-                t = t + " ";
+                t = t.Remove(i, 1);
+                t = t.Insert(i, c);
             }
         }
-        print(t);
         playerTitle.text = t;
+        CheckWord();
     }
 
-    // Change the sprite of the hanged man if it is not correct
-    //void ChangeSprite(int i)
-    //{
-    //    spriteRenderer.sprite = spriteArray[i];
-    //}
-
-    //IEnumerator NewHeading()
-    //{
-    //
-    //}
-
+    void CheckWord()
+    {
+        //scoreText = null;
+        if (playerTitle.text == title && numTitle < headers.Length)
+        {
+            scoreNum += 25;
+            scoreText.text = scoreNum.ToString();
+            numTitle++;
+            if (numTitle == headers.Length)
+            {
+                //cam.gameObject.SetActive(false);
+            }
+            else
+            {
+                StartGame(numTitle);
+            }
+        }
+    }
 }
