@@ -9,6 +9,7 @@ public class HangedMan : MonoBehaviour
     // Text -> not sure which type should I use
     string text;
     public TextMeshProUGUI playerTitle;
+    //public TMP_Text playerTitle; //To get a TMPro Text
 
     // Titles
     public string[] headers;
