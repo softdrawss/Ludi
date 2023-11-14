@@ -8,7 +8,7 @@ using TMPro.EditorUtilities;
 using TMPro;
 using System.Globalization;
 
-public class LevelManager : MonoBehaviour
+public class CalendarManager : MonoBehaviour
 {
     public TMP_Text monthYearText;
     public Button prevMonthButton;
@@ -38,38 +38,6 @@ public class LevelManager : MonoBehaviour
         prevMonthButton.onClick.AddListener(PreviousMonth);
         nextMonthButton.onClick.AddListener(NextMonth);
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //switch (currentMonth) 
-        //{
-        //    case 1:
-        //    break;
-        //    case 2:
-        //    break;
-        //    case 3:
-        //    break;
-        //    case 4:
-        //    break;
-        //    case 5:
-        //    break;
-        //    case 6:
-        //    break;
-        //    case 7:
-        //    break;
-        //    case 8:
-        //    break;
-        //    case 9:
-        //    break;
-        //    case 10:
-        //    break;
-        //    case 11:
-        //    break;
-        //    case 12:
-        //    break;
-        //}
     }
 
     void UpdateCalendar()
@@ -107,6 +75,7 @@ public class LevelManager : MonoBehaviour
                     int currentDay = daysCount; // Create a local variable to avoid closure-related issues
                     if (this.currentDay >= currentDay)
                     {
+                        dayButton.GetComponent<Image>().color = Color.red;
                         dayButton.GetComponent<Button>().onClick.AddListener(() => OnDayButtonClick(currentYear, currentMonth, currentDay));
                     }
                     daysCount++;
