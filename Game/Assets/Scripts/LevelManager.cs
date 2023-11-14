@@ -14,28 +14,13 @@ public class LevelManager : MonoBehaviour
     public Button prevMonthButton;
     public Button nextMonthButton;
     public GameObject dayButtonPrefab;
+    public GameObject weekGridPrefab;
     public Transform calendarGrid;
 
     private int currentMonth;
     private int currentYear;
     private int currentDay;
     private int daysInCurrentMonth;
-
-    //Dictionary<string, int> monthDays = new Dictionary<string, int>
-    //{
-    //    {"January", 31},
-    //    {"February", leapYear ? 29 : 28},
-    //    {"March", 31},
-    //    {"April", 30},
-    //    {"May", 31},
-    //    {"June", 30},
-    //    {"July", 31},
-    //    {"August", 31},
-    //    {"September", 30},
-    //    {"October", 31},
-    //    {"November", 30},
-    //    {"December", 31}
-    //};
 
     // Start is called before the first frame update
     void Start()
@@ -103,29 +88,34 @@ public class LevelManager : MonoBehaviour
         int daysInMonth = System.DateTime.DaysInMonth(currentYear, currentMonth);
         int daysInWeek = 7;
         int totalWeeks = Mathf.CeilToInt((float)daysInMonth / daysInWeek);
+        int daysCount = 1;
 
         for (int week = 0; week < totalWeeks; week++) 
         {
-            Transform weekTransform = Instantiate(new GameObject("Week" + (week + 1)).transform, calendarGrid);
-            GridLayoutGroup gridLayout = weekTransform.gameObject.AddComponent<GridLayoutGroup>();
-            gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gridLayout.constraintCount = daysInWeek;
-        }
-
-        // Create buttons for each day
-        for (int weekDays = 0; weekDays <= daysInWeek; weekDays++)
-        {
-            //GameObject dayButton = Instantiate(dayButtonPrefab, calendarGrid);
-            //dayButton.GetComponentInChildren<TMP_Text>().text = day.ToString();
-
-            //// Add click event to the day button
-            //int currentDay = day; // Create a local variable to avoid closure-related issues
-            //if (this.currentDay >= currentDay) 
-            //{ 
-            //    dayButton.GetComponent<Button>().onClick.AddListener(() => OnDayButtonClick(currentYear, currentMonth, currentDay)); 
-            //}
+            Transform weekTransform = Instantiate(weekGridPrefab.transform, calendarGrid);
             
+            // Create buttons for each day
+            for (int weekDays = 0; weekDays < daysInWeek; weekDays++)
+            {
+                
+                if (daysCount <= daysInMonth)
+                {
+                    GameObject dayButton = Instantiate(dayButtonPrefab, weekTransform);
+                    dayButton.GetComponentInChildren<TMP_Text>().text = daysCount.ToString();
+
+                    // Add click event to the day button
+                    int currentDay = daysCount; // Create a local variable to avoid closure-related issues
+                    if (this.currentDay >= currentDay)
+                    {
+                        dayButton.GetComponent<Button>().onClick.AddListener(() => OnDayButtonClick(currentYear, currentMonth, currentDay));
+                    }
+                    daysCount++;
+                }
+            }
+
         }
+
+        
     }
 
     void PreviousMonth()
@@ -153,7 +143,7 @@ public class LevelManager : MonoBehaviour
     void OnDayButtonClick(int year, int month, int day)
     {
         // Customize this method based on what you want to happen when a day button is clicked
-        if (day == 30) 
+        if (day == currentDay) 
         {
             SceneManager.LoadScene("Menu");
         }

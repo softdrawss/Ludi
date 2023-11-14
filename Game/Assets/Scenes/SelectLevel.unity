@@ -347,7 +347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 175}
+  m_AnchoredPosition: {x: 0, y: 200}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &899250814
@@ -542,6 +542,7 @@ GameObject:
   - component: {fileID: 1383899527}
   - component: {fileID: 1383899529}
   - component: {fileID: 1383899528}
+  - component: {fileID: 1383899530}
   m_Layer: 5
   m_Name: CalendarGrid
   m_TagString: Untagged
@@ -564,8 +565,8 @@ RectTransform:
   m_Father: {fileID: 1985112059}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.08845867, y: 0.060599223}
-  m_AnchorMax: {x: 0.90900004, y: 0.77067316}
+  m_AnchorMin: {x: 0.293, y: 0.061666667}
+  m_AnchorMax: {x: 0.7068602, y: 0.70000005}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -607,6 +608,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1383899526}
   m_CullTransparentMesh: 1
+--- !u!114 &1383899530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383899526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 1
+  m_CellSize: {x: 75, y: 75}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &1423413958
 GameObject:
   m_ObjectHideFlags: 0
@@ -655,11 +680,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -926,4 +951,5 @@ MonoBehaviour:
   prevMonthButton: {fileID: 1740681011}
   nextMonthButton: {fileID: 898663770}
   dayButtonPrefab: {fileID: 8921068984004184094, guid: 4d6dac5643bb9f4408b699be8eba055e, type: 3}
+  weekGridPrefab: {fileID: 7178436747564287600, guid: f22e6d4e343ee1941938cd64ef2bd9a7, type: 3}
   calendarGrid: {fileID: 1383899527}
