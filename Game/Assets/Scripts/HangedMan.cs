@@ -123,7 +123,7 @@ public class HangedMan : MonoBehaviour
         print("You have won!");
         square.GetComponent<SpriteRenderer>().sprite = lose;
         square.GetComponent<SpriteRenderer>().sortingLayerName = "Result";
-        square.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        square.GetComponent<SpriteRenderer>().sortingOrder = 2;
         square.SetActive(true);
     }
 
@@ -132,7 +132,7 @@ public class HangedMan : MonoBehaviour
         print("You have lost!");
         square.GetComponent<SpriteRenderer>().sprite = lose;
         square.GetComponent<SpriteRenderer>().sortingLayerName = "Result";
-        square.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        square.GetComponent<SpriteRenderer>().sortingOrder = 2;
         square.SetActive(true);
     }
 }
