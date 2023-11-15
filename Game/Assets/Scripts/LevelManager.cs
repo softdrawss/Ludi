@@ -1,155 +1,105 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro.EditorUtilities;
 using TMPro;
-using System.Globalization;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    public TMP_Text monthYearText;
-    public Button prevMonthButton;
-    public Button nextMonthButton;
-    public GameObject dayButtonPrefab;
-    public GameObject weekGridPrefab;
-    public Transform calendarGrid;
+    public Pregunta[] preguntes;
+    public List<Pregunta> noRespostes;
+    public Pregunta preguntaActual;
+    public int score;
 
-    private int currentMonth;
-    private int currentYear;
-    private int currentDay;
-    private int daysInCurrentMonth;
+    public GameObject[] targetes;
+
+    bool isFirstTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        System.DateTime currentDate = System.DateTime.Now;
-        currentMonth = currentDate.Month;
-        currentYear = currentDate.Year;
-        currentDay = currentDate.Day;
-        daysInCurrentMonth = DateTime.DaysInMonth(currentYear, currentMonth);
-
-        // Update calendar display
-        UpdateCalendar();
-
-        // Attach click events to month navigation buttons
-        prevMonthButton.onClick.AddListener(PreviousMonth);
-        nextMonthButton.onClick.AddListener(NextMonth);
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //switch (currentMonth) 
-        //{
-        //    case 1:
-        //    break;
-        //    case 2:
-        //    break;
-        //    case 3:
-        //    break;
-        //    case 4:
-        //    break;
-        //    case 5:
-        //    break;
-        //    case 6:
-        //    break;
-        //    case 7:
-        //    break;
-        //    case 8:
-        //    break;
-        //    case 9:
-        //    break;
-        //    case 10:
-        //    break;
-        //    case 11:
-        //    break;
-        //    case 12:
-        //    break;
-        //}
-    }
-
-    void UpdateCalendar()
-    {
-        // Update month and year display "ca-ES"
-        CultureInfo ci = new CultureInfo("ca-ES");
-        monthYearText.text = ci.DateTimeFormat.GetMonthName(currentMonth).ToUpper() + " " + currentYear;
-
-        // Clear existing buttons
-        foreach (Transform child in calendarGrid)
+        score = 0;
+        isFirstTime = true;
+        if (noRespostes.Count == 0) 
         {
-            Destroy(child.gameObject);
-        }
-
-        // Get the number of days in the current month
-        int daysInMonth = System.DateTime.DaysInMonth(currentYear, currentMonth);
-        int daysInWeek = 7;
-        int totalWeeks = Mathf.CeilToInt((float)daysInMonth / daysInWeek);
-        int daysCount = 1;
-
-        for (int week = 0; week < totalWeeks; week++) 
-        {
-            Transform weekTransform = Instantiate(weekGridPrefab.transform, calendarGrid);
             
-            // Create buttons for each day
-            for (int weekDays = 0; weekDays < daysInWeek; weekDays++)
+            for (int i = 0; i < preguntes.Length; i++) 
             {
-                
-                if (daysCount <= daysInMonth)
-                {
-                    GameObject dayButton = Instantiate(dayButtonPrefab, weekTransform);
-                    dayButton.GetComponentInChildren<TMP_Text>().text = daysCount.ToString();
-
-                    // Add click event to the day button
-                    int currentDay = daysCount; // Create a local variable to avoid closure-related issues
-                    if (this.currentDay >= currentDay)
-                    {
-                        dayButton.GetComponent<Button>().onClick.AddListener(() => OnDayButtonClick(currentYear, currentMonth, currentDay));
-                    }
-                    daysCount++;
-                }
+                //Debug.Log("Numero de pregunta: ");
+                preguntes[i].index = i;
+                noRespostes.Add(preguntes[i]);
             }
+        }
+        preguntaActual = noRespostes[0];
 
+        UpdateTargetes();
+
+    }
+    void UpdateTargetes()
+    {
+        if (preguntaActual != null && !isFirstTime && noRespostes[1] != null)
+        {
+            noRespostes.Remove(preguntaActual);
+            preguntaActual = noRespostes[0];
         }
 
+        if(isFirstTime) { isFirstTime = false; }
+
+        for (int i = 0; i < targetes.Length; i++)
+        {
+            targetes[i].tag = "NoticiaReal";
+            if (preguntaActual.noticies[i].esFalsa)
+            {
+                targetes[i].tag = "NoticiaFalsa";
+            }
+            GameObject buttonGameObject = targetes[i].gameObject;
+            targetes[i].GetComponent<Button>().onClick.AddListener(() => CheckIsFake(buttonGameObject));
+
+            targetes[i].GetComponentInChildren<TMP_Text>().text = preguntaActual.noticies[i].noticia;
+        }
         
     }
 
-    void PreviousMonth()
+    void CheckIsFake(GameObject buttonGameObject = null)
     {
-        currentMonth--;
-        if (currentMonth < 1)
+        if (buttonGameObject.tag == "NoticiaFalsa")
         {
-            currentMonth = 12;
-            currentYear--;
+            preguntaActual.acertat = true;
+            WinCondition();
         }
-        UpdateCalendar();
+        else
+        {
+            LooseCondition();
+        }
     }
 
-    void NextMonth()
+    void WinCondition()
     {
-        currentMonth++;
-        if (currentMonth > 12)
-        {
-            currentMonth = 1;
-            currentYear++;
-        }
-        UpdateCalendar();
-    }
-
-    void OnDayButtonClick(int year, int month, int day)
-    {
-        // Customize this method based on what you want to happen when a day button is clicked
-        if (day == currentDay) 
+        score += 25;
+        if (preguntaActual.acertat && noRespostes.Count == 1)
         {
             SceneManager.LoadScene("Menu");
         }
-        
-        Debug.Log("Clicked on: " + year + "-" + month + "-" + day);
+        else
+        {
+            UpdateTargetes();
+        }
+
+    }
+    
+    void LooseCondition()
+    {
+        if (!preguntaActual.acertat && noRespostes.Count == 1)
+        {
+            SceneManager.LoadScene("Menu");
+        }
+        else
+        {
+            UpdateTargetes();
+        }
+            
     }
 }
-
-

@@ -11,4 +11,5 @@ public class Pregunta
 {
     public Noticia[] noticies;
     public bool acertat;
+    public int index;
 }
