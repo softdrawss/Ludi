@@ -12,7 +12,6 @@ public class LevelManager : MonoBehaviour
     public Pregunta[] preguntes;
     public List<Pregunta> noRespostes;
     public Pregunta preguntaActual;
-    public int score;
 
     public GameObject[] targetes;
 
@@ -21,7 +20,6 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        score = 0;
         isFirstTime = true;
         if (noRespostes.Count == 0) 
         {
@@ -78,7 +76,8 @@ public class LevelManager : MonoBehaviour
 
     void WinCondition()
     {
-        score += 25;
+        GameManager.score += 25;
+        Debug.Log(GameManager.score);
         if (preguntaActual.acertat && noRespostes.Count == 1)
         {
             SceneManager.LoadScene("Menu");
