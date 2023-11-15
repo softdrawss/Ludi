@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro.EditorUtilities;
+//using TMPro.EditorUtilities;
 using TMPro;
 using System.Globalization;
 
